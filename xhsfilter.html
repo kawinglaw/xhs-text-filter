@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>滤雷他定 - 小红书水下投放违禁词脱敏工具</title>
+
+  <style>
+    body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            background-color: #FAF4F2;
+        }
+        [v-cloak] { display: none; }
+
+        /* 🌸 奢华液态粉金背景 */
+        .liquid-premium-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 50%, #FDF6F5 0%, #F5EAE7 100%);
+        }
+        .luxury-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(140px);
+            opacity: 0.48;
+            animation: luxuryBreathe 20s infinite alternate ease-in-out;
+        }
+        .glow-gold { width: 750px; height: 650px; background: linear-gradient(135deg, #FFE4E6 0%, #FED7AA 100%); top: -15%; left: -10%; }
+        .glow-rose { width: 850px; height: 750px; background: linear-gradient(135deg, #FCE7F3 0%, #F3E8FF 100%); bottom: -20%; right: -10%; animation-delay: -5s; }
+        .glow-peach { width: 550px; height: 550px; background: #FFE4E6; top: 25%; left: 35%; animation-delay: -11s; }
+
+        @keyframes luxuryBreathe {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            100% { transform: translate(50px, 35px) scale(1.1) rotate(25deg); }
+        }
+
+        /* 🔮 高定圆角双层珍珠高光磨砂卡片 */
+        .luxury-glass-card {
+            background: rgba(255, 255, 255, 0.42);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            outline: 1px solid rgba(251, 113, 133, 0.15);
+            box-shadow: 0 25px 55px rgba(244, 63, 94, 0.03), inset 0 1px 2px rgba(255, 255, 255, 0.5);
+        }
+
+        /* 🌊 大圆角清透白水晶面板 */
+        .crystal-panel {
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(251, 113, 133, 0.14);
+            box-shadow: inset 0 2px 6px rgba(244, 63, 94, 0.015);
+        }
+
+        /* 💧 全胶囊圆角微光安全标签 */
+        .badge-premium-green {
+            background: linear-gradient(180deg, rgba(240, 253, 244, 0.9) 0%, rgba(220, 252, 231, 0.95) 100%);
+            color: #16a34a;
+            border: 1px solid rgba(134, 239, 172, 0.45);
+            padding: 4px 12px;
+            margin: 0 2px;
+            border-radius: 9999px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        /* 🛠️ 高阶全胶囊定制下拉框 */
+        .custom-select-trigger {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(251, 113, 133, 0.25);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 9999px;
+        }
+        .custom-select-trigger:hover:not(.disabled) {
+            border-color: #fb7185;
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(251, 113, 133, 0.1);
+        }
+        .custom-dropdown-list {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(251, 113, 133, 0.22);
+            box-shadow: 0 12px 28px rgba(244, 63, 94, 0.09);
+            border-radius: 16px;
+        }
+
+        /* ✨ 丝滑转场动效定义 */
+        .smooth-fade-enter-active {
+            transition: all 0.5s cubic-bezier(0.215, 0.610, 0.355, 1);
+        }
+        .smooth-fade-enter-from {
+            opacity: 0;
+            transform: translateY(12px) scale(0.99);
+            filter: blur(4px);
+        }
+
+        /* 轻量化无框滚动条 */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(251, 113, 133, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(251, 113, 133, 0.4); }
+  </style>
+
+  
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <div class="liquid-premium-bg">
+        <div class="luxury-glow glow-gold"></div>
+        <div class="luxury-glow glow-rose"></div>
+        <div class="luxury-glow glow-peach"></div>
+    </div>
+
+<div id="app" class="flex flex-col min-h-screen relative z-10 w-full h-screen overflow-hidden" v-cloak>
+    
+    <header class="bg-white/25 backdrop-blur-xl border-b border-rose-200/20 px-8 py-3.5 flex justify-between items-center shrink-0">
+        <div class="flex items-center space-x-3.5">
+            <div class="text-3xl select-none filter drop-shadow-xs">🍑</div>
+            <div>
+                <h1 class="text-lg font-bold tracking-tight text-slate-900">滤雷他定</h1>
+                <p class="text-xs text-rose-400/90 mt-0.5 font-bold">小红书水下投放违禁词脱敏工具</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center space-x-4">
+            <button @click="showDictManager = !showDictManager" class="px-4 py-2 bg-white/80 hover:bg-white border border-rose-200/30 text-slate-700 font-bold rounded-full text-xs transition-all flex items-center gap-1.5 shadow-3xs cursor-pointer">
+                <i class="ph ph-gear text-sm text-rose-400"></i>
+                <span>词库管理</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 flex overflow-hidden p-6 gap-6 max-w-[1440px] w-full mx-auto min-h-0">
+        
+        <div class="flex-1 flex flex-col gap-5 luxury-glass-card rounded-3xl p-6 overflow-hidden relative">
+            
+            <div class="flex justify-between items-center border-b border-rose-200/20 pb-3 shrink-0">
+                <div class="flex items-center space-x-2">
+                    <i class="ph ph-textbox text-rose-400 text-xl"></i>
+                    <span class="font-bold text-slate-800 text-base tracking-wide">文案编辑区</span>
+                    <span class="text-xs font-bold text-rose-400 bg-white/70 px-2.5 py-0.5 rounded-full border border-rose-200/20">(当前: {{ sourceText.length }} 字)</span>
+                </div>
+            </div>
+
+            <div class="flex-1 flex flex-col gap-5 overflow-hidden min-h-0 relative">
+                
+                <div class="flex flex-col h-52 shrink-0 relative">
+                    <div class="absolute top-3 left-4 px-2.5 py-0.5 text-xs font-bold tracking-wider rounded-full bg-slate-200/60 text-slate-600 border border-slate-300/20 z-10 select-none">
+                        原始草稿文案
+                    </div>
+                    <textarea 
+                        v-model="sourceText" 
+                        @input="handleInput"
+                        placeholder="请在此处粘贴文案"
+                        class="w-full h-full pt-11 px-5 pb-14 border border-rose-200/20 rounded-2xl focus:outline-none focus:ring-4 focus:ring-rose-500/5 focus:border-rose-400/60 resize-none font-normal text-sm leading-relaxed text-slate-700 crystal-panel placeholder-slate-400 transition select-text"
+                    ></textarea>
+
+                    <div class="absolute bottom-3 right-4" v-if="sourceText">
+                        <button @click="executeReplace" class="px-4 py-2 bg-white/90 hover:bg-white border border-rose-200/50 hover:border-rose-400 text-rose-500 hover:text-rose-600 text-xs font-bold rounded-full shadow-3xs transition-all duration-300 flex items-center gap-1.5 cursor-pointer active:scale-95 transform">
+                            <i class="ph ph-lightning-fill text-rose-400 animate-pulse"></i>
+                            <span>一键替换违禁词</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex-1 flex flex-col relative min-h-[180px]">
+                    <div class="absolute top-3 left-4 px-2.5 py-0.5 text-xs font-bold tracking-wider rounded-full z-10 select-none border"
+                         :class="isReplaced ? 'bg-emerald-50 text-emerald-600 border-emerald-200/40' : 'bg-slate-50 text-slate-400 border-slate-200/40'">
+                        脱敏安全视图
+                    </div>
+                    
+                    <div class="w-full h-full pt-11 px-5 pb-14 border border-rose-200/20 rounded-2xl crystal-panel overflow-y-auto relative flex flex-col">
+                        
+                        <transition name="smooth-fade">
+                            <div class="text-sm font-normal text-slate-800 leading-7 whitespace-pre-wrap select-text flex-1" v-if="isReplaced && sourceText">
+                                <template v-for="(block, index) in textBlocks" :key="index">
+                                    <span v-if="!block.isMatch">{{ block.text }}</span>
+                                    <span 
+                                        v-else 
+                                        class="badge-premium-green shadow-3xs text-xs"
+                                        @click.stop="toggleLocalMenu($event, block)"
+                                    >
+                                        {{ block.currentText }}
+                                    </span>
+                                </template>
+                            </div>
+                        </transition>
+
+                        <div class="absolute bottom-3 right-4" v-if="isReplaced && sourceText">
+                            <button 
+                                @click="copyProcessedText"
+                                class="px-4 py-2 text-xs font-bold rounded-full shadow-3xs transition-all duration-300 flex items-center gap-1.5 border bg-white border-rose-200/30 hover:bg-rose-50/50 text-slate-700 cursor-pointer"
+                                :class="{ 'bg-emerald-600! text-white! border-transparent! scale-102': copySuccess }"
+                            >
+                                <i :class="copySuccess ? 'ph ph-check-bold' : 'ph ph-copy'" class="text-sm"></i>
+                                <span>{{ copySuccess ? '已成功复制纯文本' : '一键复制' }}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-96 luxury-glass-card rounded-3xl p-5 flex flex-col overflow-hidden shrink-0 h-full">
+            <h2 class="font-bold text-slate-900 border-b border-rose-200/20 pb-3 flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-1.5">
+                    <i class="ph ph-chart-bar text-rose-400 text-xl"></i>
+                    <span class="text-base tracking-wide">违禁词替换</span>
+                </div>
+                <span class="text-xs font-bold px-2.5 py-0.5 rounded-full border" :class="matchedKeywords.length > 0 ? 'text-rose-600 bg-rose-50/60 border-rose-200/40' : 'text-slate-400 bg-white/40 border-slate-200/20'">
+                    命中: {{ matchedKeywords.length }} 种
+                </span>
+            </h2>
+
+            <div class="flex-1 flex flex-col overflow-hidden min-h-0">
+                <div class="overflow-y-auto py-3 space-y-3 h-full flex-1" v-if="matchedKeywords.length > 0">
+                    <div class="text-[11px] text-rose-400/90 bg-white/50 p-2.5 rounded-2xl border border-rose-200/15 leading-relaxed flex items-start gap-1.5 mb-1">
+                        <i class="ph ph-info mt-0.5 text-xs"></i>
+                        <span>替换后，修改卡片内的下拉框可批量联动更改原文。</span>
+                    </div>
+
+                    <transition-group name="smooth-fade">
+                        <div v-for="item in matchedKeywords" :key="item.word" class="p-3.5 border border-rose-200/10 rounded-2xl bg-white/50 flex items-center justify-between gap-1 shadow-3xs">
+                            <div class="flex flex-col min-w-[70px]">
+                                <span class="font-bold text-slate-800 text-sm truncate" :title="item.word">{{ item.word }}</span>
+                            </div>
+                            
+                            <div class="flex items-center text-xs text-slate-400 font-medium space-x-1.5 flex-1 justify-end pr-2">
+                                <span>出现</span>
+                                <span class="text-rose-500 font-bold text-sm">{{ item.count }}</span>
+                                <span>次</span>
+                                <span class="text-slate-300 ml-1">|</span>
+                                <span class="text-[11px] text-slate-500/80 pl-1">全局替换为</span>
+                            </div>
+                            
+                            <div class="relative w-28 shrink-0">
+                                <div 
+                                    @click.stop="isReplaced && toggleGlobalDropdown(item.word)"
+                                    class="custom-select-trigger px-3 py-1.5 text-xs font-bold text-slate-700 flex items-center justify-between cursor-pointer shadow-3xs"
+                                    :class="{ 'disabled opacity-30 cursor-not-allowed bg-slate-100/40 border-slate-200/60 shadow-none': !isReplaced }"
+                                >
+                                    <span class="truncate pr-1 text-xs">{{ globalSelection[item.word] }}</span>
+                                    <i class="ph ph-caret-down text-[11px] text-slate-400 transition-transform" :class="{ 'rotate-180': activeGlobalDropdown === item.word }"></i>
+                                </div>
+                                
+                                <div v-if="activeGlobalDropdown === item.word" class="custom-dropdown-list absolute right-0 top-9 w-full py-1 z-30 animate-in fade-in zoom-in-95 duration-150 max-h-40 overflow-y-auto">
+                                    <div 
+                                        v-for="safeWord in dict[item.word]" 
+                                        :key="safeWord"
+                                        @click="selectGlobalSafeWord(item.word, safeWord)"
+                                        class="px-3 py-1.5 text-xs font-bold text-slate-600 hover:bg-rose-50/50 hover:text-rose-600 transition flex items-center justify-between cursor-pointer"
+                                        :class="{ 'text-rose-500 bg-rose-50/30': globalSelection[item.word] === safeWord }"
+                                    >
+                                        <span>{{ safeWord }}</span>
+                                        <i v-if="globalSelection[item.word] === safeWord" class="ph ph-check text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </transition-group>
+                </div>
+                
+                <div v-else class="flex-1 flex flex-col items-center justify-center text-slate-300 text-xs gap-1.5 select-none font-medium h-full">
+                    <i class="ph ph-signature text-3xl text-rose-300/60"></i>
+                    <span class="text-xs">暂未检测到违禁词</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div v-if="localMenu.show" :style="{ top: localMenu.top + 'px', left: localMenu.left + 'px' }" class="fixed bg-white/95 backdrop-blur-xl border border-rose-100 rounded-2xl shadow-xl py-1 z-50 min-w-[120px] max-h-40 overflow-y-auto animate-in fade-in zoom-in-95 duration-100">
+        <button 
+            v-for="safeWord in dict[localMenu.block.text]" 
+            :key="safeWord"
+            @click="selectLocalSafeWord(safeWord)"
+            class="w-full text-left px-3.5 py-1.5 text-xs hover:bg-rose-50/50 transition flex justify-between items-center font-bold cursor-pointer"
+            :class="localMenu.block.currentText === safeWord ? 'text-rose-600 bg-rose-50/30' : 'text-slate-600'"
+        >
+            <span>{{ safeWord }}</span>
+            <i v-if="localMenu.block.currentText === safeWord" class="ph ph-check text-xs"></i>
+        </button>
+    </div>
+
+    <div v-if="showDictManager" class="fixed inset-0 bg-slate-900/10 flex items-center justify-center z-50 backdrop-blur-xs" @click="showDictManager = false">
+        <div class="bg-white/95 border border-rose-200/30 backdrop-blur-xl rounded-3xl shadow-2xl w-[540px] max-h-[70vh] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-150" @click.stop>
+            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <h3 class="font-bold text-slate-900 text-sm tracking-wide flex items-center gap-1.5">
+                    <i class="ph ph-sliders text-base text-rose-400"></i>
+                    <span>后台词库配置管理</span>
+                </h3>
+                <button @click="showDictManager = false" class="text-slate-400 hover:text-slate-600 text-xl transition font-medium cursor-pointer">×</button>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-5 space-y-4">
+                <div class="text-xs text-slate-500 bg-rose-50/40 p-3 rounded-2xl border border-rose-100/40 leading-relaxed flex items-start gap-1.5">
+                    <i class="ph ph-shield-check text-sm mt-0.5 text-rose-400"></i>
+                    <span>长词优先匹配。多个安全词请用英文逗号隔开，自动同步至本地缓存。</span>
+                </div>
+
+                <div class="space-y-2">
+                    <div v-for="(safeWords, word) in dict" :key="word" class="flex gap-2.5 items-center p-2.5 border border-slate-100 rounded-2xl bg-white/50 hover:bg-slate-50 transition">
+                        <div class="w-20 font-bold text-slate-700 text-xs truncate bg-white px-2 py-1.5 rounded-full border border-rose-200 text-center shadow-3xs" :title="word">{{ word }}</div>
+                        <input 
+                            type="text" 
+                            :value="safeWords.join(',')" 
+                            @change="updateDictWord(word, $event.target.value)"
+                            class="flex-1 bg-white border border-slate-200 rounded-full px-3 py-1.5 text-xs focus:ring-2 focus:ring-rose-400/20 focus:border-rose-400 focus:outline-none transition font-bold text-slate-600"
+                        >
+                        <button @click="deleteDictWord(word)" class="text-rose-400 hover:text-rose-600 font-bold text-xs px-2 transition cursor-pointer">删除</button>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-3.5 flex gap-2">
+                    <input v-model="newWord" type="text" placeholder="违禁词" class="w-24 border border-slate-200 rounded-full px-3 py-1.5 text-xs focus:ring-2 focus:ring-rose-400/20 focus:border-rose-400 focus:outline-none bg-white transition font-bold">
+                    <input v-model="newSafeWords" type="text" placeholder="对应替换词，逗号隔开" class="flex-1 border border-slate-200 rounded-full px-3 py-1.5 text-xs focus:ring-2 focus:ring-rose-400/20 focus:border-rose-400 focus:outline-none bg-white transition font-bold">
+                    <button @click="addDictWord" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-1.5 rounded-full transition shadow-3xs shrink-0 cursor-pointer">添加</button>
+                </div>
+            </div>
+            
+            <div class="p-3.5 border-t border-slate-100 bg-slate-50/50 flex justify-end">
+                <button @click="showDictManager = false" class="bg-gradient-to-r from-rose-500 to-orange-400 text-white font-bold text-xs px-6 py-2.5 rounded-full transition shadow-xs cursor-pointer">完成配置</button>
+            </div>
+        </div>
+    </div>
+
+    <div v-if="toast.show" class="fixed top-24 left-1/2 transform -translate-x-1/2 bg-white/95 border border-rose-200 text-slate-800 px-6 py-3 rounded-full shadow-lg z-50 flex items-center gap-2 font-bold text-xs animate-in fade-in slide-in-from-top-4 duration-300 backdrop-blur-xl">
+        <i class="ph ph-sparkle text-rose-500 text-sm animate-spin-slow"></i>
+        <span>{{ toast.message }}</span>
+    </div>
+
+</div>
+
+  <script>
+    const { createApp, ref, computed, watch, onMounted } = Vue;
+
+createApp({
+    setup() {
+        // ✨ 已根据最新需求重构并校准的专属业务词库
+        const defaultDict = {
+            "搜索": ["🔍", "嗖"],
+            "淘金币": ["陶金币", "🍑金币", "桃金币", "淘💰币"],
+            "淘宝": ["🍑", "桃", "桃宝", "tb", "陶", "某宝"],
+            "天猫": ["🐱", "猫", "喵"],
+            "券": ["⭕️", "卷", "圈", "quan"],
+            "支付宝": ["zfb"],
+            "搜": ["🔍", "嗖"]
+        };
+
+        const dict = ref({});
+        const sourceText = ref("");
+        const isReplaced = ref(false);
+        const showDictManager = ref(false);
+        const copySuccess = ref(false);
+        
+        const newWord = ref("");
+        const newSafeWords = ref("");
+        const globalSelection = ref({});
+        const textBlocks = ref([]);
+        const localMenu = ref({ show: false, top: 0, left: 0, block: null });
+        const activeGlobalDropdown = ref(null); 
+        const toast = ref({ show: false, message: "" });
+
+        onMounted(() => {
+            // 使用新版本Key保证新旧词库顺利更替
+            const localDict = localStorage.getItem('taobao_premium_dict_v9');
+            dict.value = localDict ? JSON.parse(localDict) : { ...defaultDict };
+            initGlobalSelection();
+            
+            document.addEventListener('click', () => { 
+                localMenu.value.show = false; 
+                activeGlobalDropdown.value = null;
+            });
+        });
+
+        watch(dict, (newVal) => {
+            localStorage.setItem('taobao_premium_dict_v9', JSON.stringify(newVal));
+            initGlobalSelection();
+            analyzeText();
+        }, { deep: true });
+
+        const initGlobalSelection = () => {
+            Object.keys(dict.value).forEach(word => {
+                if (!globalSelection.value[word] || !dict.value[word].includes(globalSelection.value[word])) {
+                    globalSelection.value[word] = dict.value[word][0] || '';
+                }
+            });
+        };
+
+        const matchedKeywords = computed(() => {
+            if (!sourceText.value) return [];
+            const counts = {};
+            // 🛡️ 核心：长词优先排序匹配（保证“搜索”优先于“搜”）
+            const sortedKeys = Object.keys(dict.value).sort((a, b) => b.length - a.length);
+            let tempText = sourceText.value;
+            
+            sortedKeys.forEach(word => {
+                if (!word) return;
+                let count = 0;
+                let pos = tempText.indexOf(word);
+                while (pos !== -1) {
+                    count++;
+                    tempText = tempText.substring(0, pos) + "\u200B".repeat(word.length) + tempText.substring(pos + word.length);
+                    pos = tempText.indexOf(word);
+                }
+                if (count > 0) counts[word] = count;
+            });
+
+            return Object.keys(counts).map(word => ({ word, count: counts[word] }));
+        });
+
+        const hasDetected = computed(() => matchedKeywords.value.length > 0);
+
+        const handleInput = () => {
+            isReplaced.value = false;
+            analyzeText();
+        };
+
+        const analyzeText = () => {
+            if (!sourceText.value) {
+                textBlocks.value = [];
+                return;
+            }
+            // 🛡️ 核心：长词优先排序匹配
+            const sortedKeys = Object.keys(dict.value).sort((a, b) => b.length - a.length);
+            let text = sourceText.value;
+            let matches = [];
+            let occupied = new Array(text.length).fill(false);
+
+            for (let word of sortedKeys) {
+                if (!word) continue;
+                let pos = text.indexOf(word);
+                while (pos !== -1) {
+                    let isOverlapped = false;
+                    for (let i = pos; i < pos + word.length; i++) {
+                        if (occupied[i]) { isOverlapped = true; break; }
+                    }
+                    if (!isOverlapped) {
+                        matches.push({ start: pos, end: pos + word.length, word: word });
+                        for (let i = pos; i < pos + word.length; i++) occupied[i] = true;
+                    }
+                    pos = text.indexOf(word, pos + 1);
+                }
+            }
+
+            matches.sort((a, b) => a.start - b.start);
+            let result = [];
+            let lastIdx = 0;
+            
+            matches.forEach((match, idx) => {
+                if (match.start > lastIdx) {
+                    result.push({ isMatch: false, text: text.substring(lastIdx, match.start) });
+                }
+                result.push({
+                    isMatch: true,
+                    text: match.word,
+                    currentText: globalSelection.value[match.word] || match.word,
+                    blockId: idx
+                });
+                lastIdx = match.end;
+            });
+
+            if (lastIdx < text.length) {
+                result.push({ isMatch: false, text: text.substring(lastIdx) });
+            }
+            textBlocks.value = result;
+        };
+
+        const executeReplace = () => {
+            if (!hasDetected.value) {
+                toast.value.message = "文案中不含违禁词";
+                toast.value.show = true;
+                setTimeout(() => { toast.value.show = false; }, 2500);
+                
+                isReplaced.value = true;
+                return;
+            }
+            
+            textBlocks.value.forEach(block => {
+                if (block.isMatch) {
+                    block.currentText = globalSelection.value[block.text] || block.text;
+                }
+            });
+            isReplaced.value = true;
+        };
+
+        const toggleGlobalDropdown = (word) => {
+            activeGlobalDropdown.value = activeGlobalDropdown.value === word ? null : word;
+        };
+
+        const selectGlobalSafeWord = (word, safeWord) => {
+            globalSelection.value[word] = safeWord;
+            activeGlobalDropdown.value = null;
+            if (!isReplaced.value) return;
+            textBlocks.value.forEach(block => {
+                if (block.isMatch && block.text === word) {
+                    block.currentText = safeWord;
+                }
+            });
+        };
+
+        const toggleLocalMenu = (event, block) => {
+            if (!isReplaced.value) return;
+            localMenu.value.show = true;
+            localMenu.value.top = event.clientY + 12;
+            localMenu.value.left = event.clientX;
+            localMenu.value.block = block;
+        };
+
+        const selectLocalSafeWord = (safeWord) => {
+            if (localMenu.value.block) {
+                localMenu.value.block.currentText = safeWord;
+            }
+            localMenu.value.show = false;
+        };
+
+        const copyProcessedText = () => {
+            let combinedText = "";
+            textBlocks.value.forEach(block => {
+                combinedText += block.isMatch ? block.currentText : block.text;
+            });
+            
+            navigator.clipboard.writeText(combinedText).then(() => {
+                copySuccess.value = true;
+                setTimeout(() => { copySuccess.value = false; }, 2000);
+            }).catch(err => {
+                alert("复制失败: " + err);
+            });
+        };
+
+        const updateDictWord = (word, val) => {
+            const arr = val.split(',').map(s => s.trim()).filter(Boolean);
+            if (arr.length > 0) dict.value[word] = arr;
+        };
+
+        const deleteDictWord = (word) => {
+            const newD = { ...dict.value };
+            delete newD[word];
+            dict.value = newD;
+        };
+
+        const addDictWord = () => {
+            if (!newWord.value.trim() || !newSafeWords.value.trim()) return;
+            const arr = newSafeWords.value.split(',').map(s => s.trim()).filter(Boolean);
+            if (arr.length > 0) {
+                dict.value[newWord.value.trim()] = arr;
+                newWord.value = "";
+                newSafeWords.value = "";
+            }
+        };
+
+        return {
+            dict, sourceText, isReplaced, textBlocks, showDictManager, copySuccess,
+            newWord, newSafeWords, globalSelection, localMenu, activeGlobalDropdown,
+            matchedKeywords, hasDetected, handleInput, executeReplace, toast,
+            toggleGlobalDropdown, selectGlobalSafeWord, toggleLocalMenu, selectLocalSafeWord, copyProcessedText,
+            updateDictWord, deleteDictWord, addDictWord
+        };
+    }
+}).mount('#app');
+  </script>
+</body>
+</html>
