@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>滤雷他定 - 小红书水下投放文案违禁词脱敏工具</title>
+  <title>滤雷他定 - 小红书水下投放违禁词脱敏工具</title>
 
   <style>
     body {
@@ -57,20 +57,41 @@
             box-shadow: inset 0 2px 6px rgba(244, 63, 94, 0.015);
         }
 
-        /* 💧 全胶囊圆角微光安全标签 */
-        .badge-premium-green {
-            background: linear-gradient(180deg, rgba(240, 253, 244, 0.9) 0%, rgba(220, 252, 231, 0.95) 100%);
-            color: #16a34a;
-            border: 1px solid rgba(134, 239, 172, 0.45);
-            padding: 5px 14px;
-            margin: 0 3px;
-            border-radius: 9999px;
+        /* 🌿 纯内联浅绿色平滑底色标签 (绝不撑高行权、绝不破坏排版) */
+        .inline-safe-highlight {
+            display: inline;
+            background: rgba(209, 250, 229, 0.85); /* 浅绿微光填充底色 */
+            color: #059669;                        /* 优雅墨绿 */
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 4px;
             cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            font-weight: 600;
-            font-size: 15px;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
+        }
+        .inline-safe-highlight:hover {
+            background: rgba(167, 243, 208, 1);
+            box-shadow: 0 2px 5px rgba(5, 150, 105, 0.15);
+        }
+
+        /* 🧪 统一的液态质感微光悬浮按钮风格 */
+        .liquid-premium-btn {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(251, 113, 133, 0.35);
+            color: #f43f5e; /* text-rose-500 */
+            box-shadow: 0 8px 20px rgba(251, 113, 133, 0.12);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .liquid-premium-btn:hover {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: #fb7185;
+            box-shadow: 0 12px 24px rgba(251, 113, 133, 0.22);
+            transform: translateY(-1px);
+        }
+        .liquid-premium-btn:active {
+            transform: translateY(1px) scale(0.98);
+            box-shadow: 0 4px 10px rgba(251, 113, 133, 0.1);
         }
 
         /* 🛠️ 高阶全胶囊定制下拉框 */
@@ -131,7 +152,7 @@
             <div class="text-4xl select-none filter drop-shadow-xs">🍑</div>
             <div>
                 <h1 class="text-2xl font-extrabold tracking-tight text-slate-900">滤雷他定</h1>
-                <p class="text-sm text-rose-400/90 mt-0.5 font-bold">小红书水下投放文案·违禁词脱敏工具</p>
+                <p class="text-sm text-rose-400/90 mt-0.5 font-bold">小红书水下投放违禁词脱敏工具</p>
             </div>
         </div>
         
@@ -165,12 +186,12 @@
                         v-model="sourceText" 
                         @input="handleInput"
                         placeholder="请在此处粘贴文案"
-                        class="w-full h-full pt-12 px-5 pb-14 border border-rose-200/20 rounded-2xl focus:outline-none focus:ring-4 focus:ring-rose-500/5 focus:border-rose-400/60 resize-none font-normal text-base leading-relaxed text-slate-700 crystal-panel placeholder-slate-400 transition select-text"
+                        class="w-full h-full pt-12 px-5 pb-16 border border-rose-200/20 rounded-2xl focus:outline-none focus:ring-4 focus:ring-rose-500/5 focus:border-rose-400/60 resize-none font-normal text-base leading-relaxed text-slate-700 crystal-panel placeholder-slate-400 transition select-text"
                     ></textarea>
 
                     <div class="absolute bottom-3 right-4" v-if="sourceText">
-                        <button @click="executeReplace" class="px-5 py-2.5 bg-white/90 hover:bg-white border border-rose-200/50 hover:border-rose-400 text-rose-500 hover:text-rose-600 text-sm font-bold rounded-full shadow-3xs transition-all duration-300 flex items-center gap-2 cursor-pointer active:scale-95 transform">
-                            <i class="ph ph-lightning-fill text-rose-400 animate-pulse"></i>
+                        <button @click="executeReplace" class="liquid-premium-btn px-6 py-2.5 text-sm font-bold rounded-full flex items-center gap-2 cursor-pointer">
+                            <i class="ph ph-lightning-fill animate-pulse"></i>
                             <span>一键替换违禁词</span>
                         </button>
                     </div>
@@ -182,34 +203,39 @@
                         脱敏安全视图
                     </div>
                     
-                    <div class="w-full h-full pt-12 px-5 pb-14 border border-rose-200/20 rounded-2xl crystal-panel overflow-y-auto relative flex flex-col">
+                    <div class="w-full h-full border border-rose-200/20 rounded-2xl crystal-panel relative overflow-hidden flex flex-col">
                         
-                        <transition name="smooth-fade">
-                            <div class="text-base font-normal text-slate-800 leading-8 whitespace-pre-wrap select-text flex-1" v-if="isReplaced && sourceText">
-                                <template v-for="(block, index) in textBlocks" :key="index">
-                                    <span v-if="!block.isMatch">{{ block.text }}</span>
-                                    <span 
-                                        v-else 
-                                        class="badge-premium-green shadow-3xs"
-                                        @click.stop="toggleLocalMenu($event, block)"
-                                    >
-                                        {{ block.currentText }}
-                                    </span>
-                                </template>
-                            </div>
-                        </transition>
+                        <div class="w-full h-full pt-12 px-5 pb-16 overflow-y-auto">
+                            <transition name="smooth-fade">
+                                <div class="text-base font-normal text-slate-800 leading-8 whitespace-pre-wrap select-text" v-if="isReplaced && sourceText">
+                                    <template v-for="(block, index) in textBlocks" :key="index">
+                                        <span v-if="!block.isMatch">{{ block.text }}</span>
+                                        <span 
+                                            v-else 
+                                            class="inline-safe-highlight"
+                                            @click.stop="toggleLocalMenu($event, block)"
+                                        >
+                                            <span :class="{ 'font-bold text-emerald-700': !/^\p{Emoji}$/u.test(block.currentText) }">
+                                                {{ block.currentText }}
+                                            </span>
+                                        </span>
+                                    </template>
+                                </div>
+                            </transition>
+                        </div>
 
-                        <div class="absolute bottom-3 right-4" v-if="isReplaced && sourceText">
+                        <div class="absolute bottom-3 right-4 z-20" v-if="isReplaced && sourceText">
                             <button 
                                 @click="copyProcessedText"
-                                class="px-5 py-2.5 text-sm font-bold rounded-full shadow-3xs transition-all duration-300 flex items-center gap-2 border bg-white border-rose-200/30 hover:bg-rose-50/50 text-slate-700 cursor-pointer"
-                                :class="{ 'bg-emerald-600! text-white! border-transparent! scale-102': copySuccess }"
+                                class="liquid-premium-btn px-6 py-2.5 text-sm font-bold rounded-full flex items-center gap-2 cursor-pointer"
+                                :class="{ 'bg-emerald-600! text-white! border-transparent! shadow-md': copySuccess }"
                             >
                                 <i :class="copySuccess ? 'ph ph-check-bold' : 'ph ph-copy'" class="text-base"></i>
                                 <span>{{ copySuccess ? '已成功复制纯文本' : '一键复制' }}</span>
                             </button>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -308,7 +334,7 @@
             <div class="flex-1 overflow-y-auto p-5 space-y-4">
                 <div class="text-xs text-slate-500 bg-rose-50/40 p-3 rounded-2xl border border-rose-100/40 leading-relaxed flex items-start gap-1.5">
                     <i class="ph ph-shield-check text-sm mt-0.5 text-rose-400"></i>
-                    <span>多个替换词请用英文逗号隔开，自动同步至本地缓存。</span>
+                    <span>长词优先匹配。多个安全词请用英文逗号隔开，自动同步至本地缓存。</span>
                 </div>
 
                 <div class="space-y-2">
