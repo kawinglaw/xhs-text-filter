@@ -372,7 +372,7 @@ const { createApp, ref, computed, watch, onMounted } = Vue;
 
 createApp({
     setup() {
-        // 🚀 已将所有花体、气泡、特殊符号数字完美整合进默认词库中
+        // 🚀 默认初始配置：去除了单个数字混淆，专注长词匹配与特色敏感词
         const defaultDict = {
             "搜索": ["🔍", "嗖"],
             "淘金币": ["陶金币", "🍑金币", "桃金币", "淘💰币"],
@@ -381,11 +381,10 @@ createApp({
             "券": ["⭕️", "卷", "圈", "quan"],
             "支付宝": ["zfb"],
             "搜": ["🔍", "嗖"],
-"减": ["➖"],
+            "减": ["➖"],
             "购物金": ["购物jin", "购物💰"],
             "蚂蚁": ["🐜"],
-"88vip": ["❽❽vip", "𝟠𝟠v1p", "8ྀི8ྀིvlp"],
-            // 🔢 数字库全量升级
+            // 🔢 618 花字全量内置，整行优先匹配
             "618": ["𝟞𝟙𝟠", "𝟼𝟷𝟾", "𝟨𝟣𝟪", "⁶¹⁸", "₆₁₈", "𝟔𝟏𝟖", "𝟲𝟭𝟴", "6ྀི1ྀི8ྀི", "❻❶❽", "⑥①⑧", "𝟼𝟷𝟾♡", "㊅㊀㊇"],
         }; 
 
@@ -404,8 +403,8 @@ createApp({
         const toast = ref({ show: false, message: "" });
 
         onMounted(() => {
-            // 增加版本标识以确保最新词库能直接更新生效
-            const localDict = localStorage.getItem('taobao_premium_dict_v15_digits');
+            // ✨ 核心更改：升级缓存版本号为 v16_618，强制清除用户旧浏览器缓存中残留的数据
+            const localDict = localStorage.getItem('taobao_premium_dict_v16_618');
             dict.value = localDict ? JSON.parse(localDict) : { ...defaultDict };
             initGlobalSelection();
             
@@ -416,7 +415,8 @@ createApp({
         });
 
         watch(dict, (newVal) => {
-            localStorage.setItem('taobao_premium_dict_v15_digits', JSON.stringify(newVal));
+            // ✨ 核心更改：同步更新写入缓存的版本号
+            localStorage.setItem('taobao_premium_dict_v16_618', JSON.stringify(newVal));
             initGlobalSelection();
             analyzeText();
         }, { deep: true });
@@ -432,7 +432,6 @@ createApp({
         const matchedKeywords = computed(() => {
             if (!sourceText.value) return [];
             const counts = {};
-            // 确保按照字符长度从长到短匹配（10优先于1）
             const sortedKeys = Object.keys(dict.value).sort((a, b) => b.length - a.length);
             let tempText = sourceText.value;
             
