@@ -1,4 +1,4 @@
-】<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -241,7 +241,7 @@
             <h2 class="font-bold text-slate-900 border-b border-rose-200/20 pb-3 flex items-center justify-between shrink-0">
                 <div class="flex items-center gap-2">
                     <i class="ph ph-chart-bar text-rose-400 text-2xl"></i>
-                    <span class="text-lg tracking-wide">违禁词替换</span>
+                    <span class="text-lg tracking-wide">违禁词/数字替换</span>
                 </div>
                 <span class="text-xs font-bold px-2.5 py-0.5 rounded-full border" :class="matchedKeywords.length > 0 ? 'text-rose-600 bg-rose-50/60 border-rose-200/40' : 'text-slate-400 bg-white/40 border-slate-200/20'">
                     命中: {{ matchedKeywords.length }} 种
@@ -299,7 +299,7 @@
                 
                 <div v-else class="flex-1 flex flex-col items-center justify-center text-slate-300 text-sm gap-2 select-none font-medium h-full">
                     <i class="ph ph-signature text-4xl text-rose-300/60"></i>
-                    <span class="text-sm">暂未检测到违禁词</span>
+                    <span class="text-sm">暂未检测到违禁词或敏感数字</span>
                 </div>
             </div>
         </div>
@@ -331,7 +331,7 @@
             <div class="flex-1 overflow-y-auto p-5 space-y-4">
                 <div class="text-xs text-slate-500 bg-rose-50/40 p-3 rounded-2xl border border-rose-100/40 leading-relaxed flex items-start gap-1.5">
                     <i class="ph ph-shield-check text-sm mt-0.5 text-rose-400"></i>
-                    <span>长词优先匹配。多个安全词请用英文逗号隔开，自动同步至本地缓存。</span>
+                    <span>多个替换词请用英文逗号隔开，自动同步至本地缓存。</span>
                 </div>
 
                 <div class="space-y-2">
@@ -372,6 +372,7 @@ const { createApp, ref, computed, watch, onMounted } = Vue;
 
 createApp({
     setup() {
+        // 🚀 已将所有花体、气泡、特殊符号数字完美整合进默认词库中
         const defaultDict = {
             "搜索": ["🔍", "嗖"],
             "淘金币": ["陶金币", "🍑金币", "桃金币", "淘💰币"],
@@ -379,7 +380,21 @@ createApp({
             "天猫": ["🐱", "猫", "喵"],
             "券": ["⭕️", "卷", "圈", "quan"],
             "支付宝": ["zfb"],
-            "搜": ["🔍", "嗖"]
+            "搜": ["🔍", "嗖"],
+            // 🔢 数字库全量升级
+            "10": ["𝟷𝟶", "𝟣𝟢", "¹⁰", "₁₀", "𝟏𝟎", "𝟭𝟬", "1ྀི0ྀི", "⓾", "⓵⓪", "🔟", "㊉"],
+            "1": ["𝟙", "𝟷", "𝟣", "¹", "₁", "𝟏", "𝟭", "1ྀི", "❶", "⓵", "𝟬𝟭", "𝟢𝟣", "𝟎𝟏", "1⃞", "1⃝", "①", "𝟿𝟿𝟷♡"],
+            "2": ["𝟚", "𝟸", "𝟤", "²", "₂", "𝟐", "𝟮", "2ྀི", "❷", "⓶", "𝟬𝟮", "𝟢𝟤", "𝟎𝟐", "2⃞", "2⃝", "②"],
+            "3": ["𝟛", "𝟛", "𝟹", "𝟥", "³", "₃", "𝟑", "𝟯", "3ྀི", "❸", "⓷", "𝟬𝟯", "𝟢𝟥", "𝟎𝟗", "3⃞", "3⃝", "③"],
+            "4": ["𝟜", "𝟺", "𝟦", "⁴", "₄", "𝒒", "𝟒", "𝟰", "4ྀི", "❹", "⓸", "𝟬𝟲", "𝟢𝟦", "𝟎𝟒", "4⃞", "4⃝", "④"],
+            "5": ["𝟝", "𝟻", "𝟧", "⁵", "₅", "𝟓", "𝟱", "5ྀི", "❺", "⓹", "𝟬𝟱", "𝟢𝟱", "𝟎𝟓", "5⃞", "5⃝", "⑤"],
+            "6": ["𝟞", "𝟼", "𝟨", "⁶", "₆", "𝟔", "𝟲", "6ྀི", "❻", "⓺", "𝟬𝟲", "𝟢𝟲", "𝟎𝟔", "6⃞", "6⃝", "⑥"],
+            "7": ["𝟟", "𝟽", "𝟩", "⁷", "₇", "𝟕", "𝟳", "7ྀི", "❼", "⓻", "𝟬𝟳", "𝟢𝟩", "𝟎𝟕", "7⃞", "7⃝", "⑦"],
+            "8": ["𝟠", "𝟾", "𝟪", "⁸", "₈", "𝟖", "𝟴", "8ྀི", "❽", "⓼", "𝟬𝟴", "𝟢𝟴", "𝟎𝟖", "8⃞", "8⃝", "⑧"],
+            "9": ["𝟡", "𝟿", "𝟫", "⁹", "₉", "𝟗", "𝟵", "9ྀི", "❾", "⓽", "𝟬𝟵", "𝟢𝟵", "𝟎𝟗", "9⃞", "9⃝", "⑨"],
+            "0": ["𝟘", "𝟶", "𝟢", "⁰", "₀", "𝟎", "𝟬", "0ྀི", "⓪", "𝟬𝟬", "𝟢𝟢", "𝟎𝟎", "0⃞", "0⃝"],
+            "一": ["㊀"], "二": ["㊁"], "三": ["㊂"], "四": ["㊃"], "五": ["㊄"], 
+            "六": ["㊅"], "七": ["㊆"], "八": ["㊇"], "九": ["㊈"], "十": ["㊉"]
         };
 
         const dict = ref({});
@@ -397,7 +412,8 @@ createApp({
         const toast = ref({ show: false, message: "" });
 
         onMounted(() => {
-            const localDict = localStorage.getItem('taobao_premium_dict_v12');
+            // 增加版本标识以确保最新词库能直接更新生效
+            const localDict = localStorage.getItem('taobao_premium_dict_v15_digits');
             dict.value = localDict ? JSON.parse(localDict) : { ...defaultDict };
             initGlobalSelection();
             
@@ -408,7 +424,7 @@ createApp({
         });
 
         watch(dict, (newVal) => {
-            localStorage.setItem('taobao_premium_dict_v12', JSON.stringify(newVal));
+            localStorage.setItem('taobao_premium_dict_v15_digits', JSON.stringify(newVal));
             initGlobalSelection();
             analyzeText();
         }, { deep: true });
@@ -424,6 +440,7 @@ createApp({
         const matchedKeywords = computed(() => {
             if (!sourceText.value) return [];
             const counts = {};
+            // 确保按照字符长度从长到短匹配（10优先于1）
             const sortedKeys = Object.keys(dict.value).sort((a, b) => b.length - a.length);
             let tempText = sourceText.value;
             
@@ -500,7 +517,7 @@ createApp({
 
         const executeReplace = () => {
             if (!hasDetected.value) {
-                toast.value.message = "文案中不含违禁词";
+                toast.value.message = "文案中未检测到敏感词或数字";
                 toast.value.show = true;
                 setTimeout(() => { toast.value.show = false; }, 2500);
                 
