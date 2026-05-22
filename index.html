@@ -375,7 +375,7 @@ createApp({
         // 🚀 默认初始配置：去除了单个数字混淆，专注长词匹配与特色敏感词
         const defaultDict = {
             "搜索": ["🔍", "嗖"],
-            "淘金币": ["陶金币", "🍑金币", "桃金币", "淘💰币"],
+            "淘金币": ["陶金币", "tao金币","🍑金币", "桃金币", "淘💰币"],
             "淘宝": [ "桃", "🍑","桃宝", "tb", "陶", "某宝"],
             "天猫": ["🐱","🐈‍⬛","🐈", "猫", "喵"],
             "券": ["⭕️", "卷", "圈", "quan"],
@@ -384,6 +384,9 @@ createApp({
             "减": ["➖"],
             "购物金": ["购物jin", "购物💰"],
             "蚂蚁": ["🐜"],
+"88vip": ["88vlp", "𝟾𝟾vip", "⑧⑧vip"],
+"88VIP": ["88vlp", "𝟾𝟾vip", "⑧⑧vip"],
+"折": ["zhe", "哲"],
             // 🔢 618 花字全量内置，整行优先匹配
             "618": ["𝟞𝟙𝟠", "𝟼𝟷𝟾", "𝟨𝟣𝟪", "⁶¹⁸", "₆₁₈", "𝟔𝟏𝟖", "𝟲𝟭𝟴", "6ྀི1ྀི8ྀི", "❻❶❽", "⑥①⑧", "𝟼𝟷𝟾♡", "㊅㊀㊇"],
         }; 
@@ -403,8 +406,8 @@ createApp({
         const toast = ref({ show: false, message: "" });
 
         onMounted(() => {
-            // ✨ 核心更改：升级缓存版本号为 v16_618，强制清除用户旧浏览器缓存中残留的数据
-            const localDict = localStorage.getItem('taobao_premium_dict_v16_618');
+            // ✨ 核心更改：升级缓存版本号为 v17_88vip，强制清除用户旧浏览器缓存中残留的数据
+            const localDict = localStorage.getItem('taobao_premium_dict_v17_88vip');
             dict.value = localDict ? JSON.parse(localDict) : { ...defaultDict };
             initGlobalSelection();
             
@@ -416,7 +419,7 @@ createApp({
 
         watch(dict, (newVal) => {
             // ✨ 核心更改：同步更新写入缓存的版本号
-            localStorage.setItem('taobao_premium_dict_v16_618', JSON.stringify(newVal));
+            localStorage.setItem('taobao_premium_dict_v17_88vip', JSON.stringify(newVal));
             initGlobalSelection();
             analyzeText();
         }, { deep: true });
